@@ -13,7 +13,6 @@
 Napi::Array UserNames(const Napi::CallbackInfo& info) {
   Napi::Env env = info.Env();
 
-  int ia = 0;
   Napi::Array arr = Napi::Array::New(env);
 
 //******************
@@ -26,7 +25,6 @@ Napi::Array UserNames(const Napi::CallbackInfo& info) {
    DWORD dwTotalEntries = 0;
    DWORD dwResumeHandle = 0;
    DWORD i;
-   DWORD dwTotalCount = 0;
    NET_API_STATUS nStatus;
    LPTSTR pszServerName = NULL;
 
@@ -53,11 +51,10 @@ Napi::Array UserNames(const Napi::CallbackInfo& info) {
                {
                   break;
                }
-               //--
-               arr[ia++] = Napi::String::New(env, (const char16_t *) pTmpBuf->usri0_name);
-               //--
+               //
+               arr[i] = Napi::String::New(env, (const char16_t *) pTmpBuf->usri0_name);
+               //
                pTmpBuf++;
-               dwTotalCount++;
             }
          }
       }

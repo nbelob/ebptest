@@ -20,10 +20,12 @@ i = 0;
 f = 0;
 while (i < l) {
     console.log(arr[i]);
+    /*
     if (arr[i].toUpperCase() == 'АдмиНИстратор'.toUpperCase()) {
         f = 1;
         break;
     }
+    */
     i = i + 1;
 }
 console.log(f);
