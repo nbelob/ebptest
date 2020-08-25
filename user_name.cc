@@ -1,13 +1,16 @@
 #include <napi.h>
 
+
+
 Napi::Array UserNames(const Napi::CallbackInfo& info) {
   Napi::Env env = info.Env();
 
-  Napi::Array arr = Napi::Array::New(env, 3);
+  int ia = 0;
+  Napi::Array arr = Napi::Array::New(env, 10);
 
-  arr[1] = Napi::String::New(env, "User1");
-  arr[2] = Napi::String::New(env, "Имя2");
-  arr[3] = Napi::String::New(env, "User три");
+  arr[ia++] = Napi::String::New(env, "User1");
+  arr[ia++] = Napi::String::New(env, "Имя2");
+  arr[ia++] = Napi::String::New(env, "User три");
 
   return arr;
 }
