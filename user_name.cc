@@ -14,13 +14,7 @@ Napi::Array UserNames(const Napi::CallbackInfo& info) {
   Napi::Env env = info.Env();
 
   int ia = 0;
-  Napi::Array arr = Napi::Array::New(env, 15);
-
-/*
-  arr[ia++] = Napi::String::New(env, "User1");
-  arr[ia++] = Napi::String::New(env, "Имя2");
-  arr[ia++] = Napi::String::New(env, "User три");
-*/
+  Napi::Array arr = Napi::Array::New(env);
 
 //******************
 
@@ -36,7 +30,7 @@ Napi::Array UserNames(const Napi::CallbackInfo& info) {
    NET_API_STATUS nStatus;
    LPTSTR pszServerName = NULL;
 
-   do // begin do
+   do
    {
       nStatus = NetUserEnum((LPCWSTR) pszServerName,
                             dwLevel,
@@ -46,55 +40,34 @@ Napi::Array UserNames(const Napi::CallbackInfo& info) {
                             &dwEntriesRead,
                             &dwTotalEntries,
                             &dwResumeHandle);
-      //
-      // If the call succeeds,
-      //
+
       if ((nStatus == NERR_Success) || (nStatus == ERROR_MORE_DATA))
       {
          if ((pTmpBuf = pBuf) != NULL)
          {
-            //
-            // Loop through the entries.
-            //
             for (i = 0; (i < dwEntriesRead); i++)
             {
                assert(pTmpBuf != NULL);
 
                if (pTmpBuf == NULL)
                {
-                  //fprintf(stderr, "An access violation has occurred\n");
                   break;
                }
-               //
-               //  Print the name of the user account.
-               //
-               //wprintf(L"\t-- %s\n", pTmpBuf->usri0_name);
-
                //--
                arr[ia++] = Napi::String::New(env, (const char16_t *) pTmpBuf->usri0_name);
                //--
-
                pTmpBuf++;
                dwTotalCount++;
             }
          }
       }
-      //
-      // Free the allocated buffer.
-      //
       if (pBuf != NULL)
       {
          NetApiBufferFree(pBuf);
          pBuf = NULL;
       }
    }
-   // Continue to call NetUserEnum while
-   //  there are more entries.
-   //
-   while (nStatus == ERROR_MORE_DATA); // end do
-   //
-   // Check again for allocated memory.
-   //
+   while (nStatus == ERROR_MORE_DATA);
    if (pBuf != NULL)
       NetApiBufferFree(pBuf);
 
